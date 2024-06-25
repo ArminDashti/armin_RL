@@ -1,12 +1,24 @@
 import minari
-from armin_utils.RL.modules.reply_memory import reply_memory
+# from armin_utils.RL.modules.reply_memory import reply_memory
 
 
 class make:
     def __init__(self, game='door-human-v2'):
-        self.dataset = minari.load_dataset(game)
+        self.dataset = minari.load_dataset(game, download=True)
         
-      
+        
+    def __getattr__(self, name):
+        def method(*args, **kwargs):
+            print('hiii')
+            return getattr(self.dataset, name)
+        return method
+        
+        
+    @property  
+    def original_dataset(self):
+        return self.dataset
+    
+    
     @property
     def action_dim(self):
         return self.dataset[0].actions.shape[1:]
@@ -33,7 +45,6 @@ class make:
         else:
             episodes = []
             for episode_data in self.dataset.iterate_episodes():
-                
                 episode = []
                 for step in range(episode_data.total_timesteps):
                     sample = {}
@@ -53,7 +64,7 @@ class make:
         return episodes
     
     
-    def reply_memory(self):
+    def ReplyMemory(self):
         time_steps_num = self.time_steps_num
         episodes_num = self.episodes_num
         capacity = time_steps_num * episodes_num
@@ -74,3 +85,7 @@ class make:
                 rm.push(observations=observations, actions=actions, rewards=rewards, truncations=truncations, next_observations=next_observations)
                 
         return rm
+    
+
+env = make()
+env.episodes_num
