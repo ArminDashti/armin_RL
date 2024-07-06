@@ -47,7 +47,7 @@ class Make:
     
     def observation_space(self, only_dim=True):
         if only_dim == True:
-            return self.env.observation_space.n
+            return self.env.observation_space.shape
         else:
             return self.env.observation_space
 
@@ -63,7 +63,7 @@ class Make:
         return {'lowest_action':self.env.action_space.low, 
                 'highest_action':self.env.action_space.high, 
                 'range':(self.env.action_space.low[0], self.env.action_space.high[0]), 
-                'shape':self.env.action_space.high.shape,
+                'shape':self.env.action_space.high.shape[0],
                 'len':len(self.env.action_space.high)}
 
 
