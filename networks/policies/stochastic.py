@@ -74,7 +74,7 @@ class squashed_normal(distributions.transformed_distribution.TransformedDistribu
     
     
 # https://github.com/jakegrigsby/deep_control/blob/master/deep_control/nets.py
-class stochastic_actor(nn.Module):
+class stochastic_policy(nn.Module):
     def __init__(
         self,
         state_space_size,
