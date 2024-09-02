@@ -1,7 +1,8 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Jul 18 17:12:21 2024
+import torch
 
-@author: armin
-"""
+# Set the number of threads
+# torch.set_num_threads(4)
 
+# Get the current number of threads
+num_threads = torch.get_num_threads()
+print(f"Number of threads: {num_threads}")

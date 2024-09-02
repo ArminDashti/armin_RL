@@ -19,58 +19,11 @@ def atanh(x):
     return 0.5*torch.log(one_plus_x/ one_minus_x)
 
 
-class TanhNormal(Distribution):
-    def __init__(self, normal_mean, normal_std, epsilon=1e-6):
-        self.normal_mean = normal_mean
-        self.normal_std = normal_std
-        self.normal = Normal(normal_mean, normal_std)
-        self.epsilon = epsilon
 
-    def sample_n(self, n, return_pre_tanh_value=False):
-        z = self.normal.sample_n(n)
-        if return_pre_tanh_value:
-            return torch.tanh(z), z
-        else:
-            return torch.tanh(z)
-
-    def log_prob(self, value, pre_tanh_value=None):
-        if pre_tanh_value is None:
-            pre_tanh_value = torch.log(
-                (1+value) / (1-value)
-            ) / 2
-        return self.normal.log_prob(pre_tanh_value) - torch.log(
-            1 - value * value + self.epsilon
-        )
-
-    def sample(self, return_pretanh_value=False):
-        z = self.normal.sample().detach()
-
-        if return_pretanh_value:
-            return torch.tanh(z), z
-        else:
-            return torch.tanh(z)
-
-    def rsample(self, return_pretanh_value=False):
-        z = (
-            self.normal_mean +
-            self.normal_std *
-            Normal(
-                tensor.zeros(self.normal_mean.size()),
-                tensor.ones(self.normal_std.size())
-            ).sample()
-        )
-        z.requires_grad_()
-
-        if return_pretanh_value:
-            return torch.tanh(z), z
-        else:
-            return torch.tanh(z)
         
     
         
-class tanh_gaussian(MLP.MLP):
-
-
+class TanhGaussianPolicy(MLP.MLP):
     def __init__(self, hidden_sizes, obs_dim, action_dim, std=None, init_w=1e-3, **kwargs):
         super().__init__(hidden_sizes, input_size=obs_dim, output_size=action_dim, init_w=init_w, **kwargs)
         
