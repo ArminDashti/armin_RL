@@ -1,6 +1,6 @@
 import minari
     
-    
+
 class CreateDataset:
     def __init__(self, algoritm='PPO'):
         self.algoritm = algoritm
